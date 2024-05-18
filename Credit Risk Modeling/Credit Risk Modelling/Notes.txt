@@ -1,0 +1,178 @@
+Case STudy1 - Internal bank dataset
+Case Study2 - CIBIL dataset
+
+MOre granular(Detailed) data gives us more accurate results
+
+Case STudy1
+- Its an internal bank dataset which means it consist of loan details of the the customer with this perticular bank. 
+- EVery entry is a customer
+- *Loan in technical terms when entered in the bank system is known as Tradeline (TL)
+
+
+Case Study2
+- Every entry is a customer
+- Approved flag is our target variable with value range P1 to P4 ( P1 being the highest priority customer while P4 being the least one)
+
+
+
+NOtes on the basis of DATA:
+- we have -99999 values in the dataset which are basically the null values as some softwares doesnt take null values as input so these numbers are assigned in place of them
+
+
+NOtes for working on any Project
+- Try dividing the features in numerical and categorical features and treat them separately.
+- In case of categorical features try checking if they are important to predict the target variable or not using different available tests.
+
+
+
+
+# Hypothesis Testing
+
+
+H0 : Null Hypothesis
+h1 : Alternate Hypothesis
+
+These hypothesis are opposite to each other.
+
+For example in this project when working with categorical features we have to check whether a categorical features is important to predict the target variable on the basis of which we can keep or remove that columns . We have lets say 
+MARITALSTATUS vs Approved_Flag
+
+Now the question is whether these two are associated?
+
+Step 1 : Null Hypothesis (H0)
+
+H0 : MARITALSTATUS is not associated with the target variable Approved_Flag                 
+
+Step 2 : Alternate Hypothesis (H1)
+
+H1 : MARITALSTATUS is associated with the target variable Approved_Flag
+
+Step 3 : Alpha - Significance/Strictness level/Margin error
+
+Alpha is always assumed never calculated.
+
+It basically means how much error we are willing to accept in our hypothesis.
+
+Generally Alpha is taken as 0.05 i.e, 5% error (For less risky project) 
+
+Note : Alpha will be smaller and smaller where  the project is too risky (eg. Project related to vaccines)
+
+Step 4 : Confidence Interval = 1 - Alpha
+
+for Alpha = 0.05 then your confidence level is 0.95 which means you have 95% confidence that your hypothesis is true.
+
+Note: The Null hypothesis is always true by default hence we try to find evidence to prove that the Null hypothesis is not true.
+
+Step 5 : Calculate evidence againt H0 (Null Hypothesis)
+This evidence is called p-value. And it is calculated using Different tests that are:
+- T test
+- CHisquare test
+- Anova test 
+- and more.
+- And the degree of freedom 
+
+Here we will get p-value of our hypothesis.
+
+Step 6 : If we find enough evidence againt H0 we will reject H0 and accept H1 . If not we will accept H0.
+
+If the p value is less than or equal to alpha then we will reject H0 and accept H1.
+
+If the p value is greater than alpha then we will fail to reject H0.
+
+
+NOte : we dont say we accept H0 because we have not found enough evidence againt H0 because there is a 5% chance that we can be wrong.
+
+ANalogy : Prosecution in court of law
+
+
+
+
+TYpes of tests we will do to find p value against H0
+
+1. T test = CAT vs NUM : But categorical feature with only two categories
+2. Chisquare test = CAT VS CAT 
+3. Anova test = CAT vs NUM : But categorical feature with more than two categories
+
+
+# Multicollinearity vs Correlation
+
+Multicollinearity = Predictability of each features by other features
+
+In other words : whether we can predict the value of one feature by using the other features which can only happen when more than two features are closely associated with each other.
+
+
+Correlation is specific to strictly linear relationship between two columns only.  ****** And hence used very less in corporate projects ******
+Any other type of relationship like convex function and give us missleading values if we dont have domain knowledge whether the relationship between two features is linear or not. We cant just guess work it.
+
+Hence to be in the safe side if you are unsure only check for Multicollinearity and remove it completely and in general always check for multicollinearity.
+
+Problems because of multicollinearity existence:
+1. Intrepretation of Independent features can go wrong when explaining it to the business user.
+2. Coefficient of independent features can be wrong when a regression equation is created for prediction because change in value of one feature can change the value of other feature automatically which we dont have any control over will make us unsure of decisions that needed to be made.
+
+
+# VIF - Variance Inflation Factor
+It is used to identify multicollinearity among independent features.
+
+Step 1 : We regress one dependent variable on all the rest independent variables which will give us R2 value for each independent feature.
+
+Step 2 : We calculate the VIF for each independent variable.
+           
+           VIF = 1/(1-R2)
+
+VIF ranges from 1 to infinity.
+VIF = 1       : No multicollinearity
+VIF = 1 to 5  : Low multicollinearity
+VIF = 5 to 10 : Moderate multicollinearity
+VIF > 10      : High multicollinearity  ------>>> Definately remove the feature in this case.
+
+We repeat the process untill we get VIF value for each independent numeric column.
+
+
+# There are two methods for VIF
+1. Parallel
+2. Sequential
+
+For example if we have 10 numeric column among which we have to check muylticollinearity
+
+In case of Parallel : every single column will be checked against rest 9 column till the end of the loop. 
+Suppose there 3 columns with VIF value more than 6 and we have assigned a threshold value of 6 we will remove these three columns but the thing is in this case these 3 columns are associated to each other and and removing all three will result in a loss of an important feature.Hence we must to keep one of three column.
+
+This is achieved in sequential way.
+
+In sequential way : we will check the first column against rest 9 column and if the VIF value is more than 6 we will remove it and check the second column against rest 8 column and so on
+
+This way we can keeping at least on column which was previously in a multicollinearity relationship.
+
+*******************Hence parallel VIF method is not recommended to use in projects.*******************
+
+
+Xg Boost is an ensemble technique wherein you create multiple decision trees(BAse learners).
+- Every BAse learner is accounted in the final predictions and multiply them with a learning rate
+- Base learner is always made in a way that evry other base learner is trying to predict the error of the previous base learner. (Iterative Process)
+
+# Accuracy will always fail us to give correct insight of the model in case of IMBALANCED dataset. Hence if the dataset is quite balanced only then accuracy matrix can be relied upon.
+
+Therefore in case of iMbalanced data f1 score is a better matrix for model evaluation 
+
+- By looking at the imbalance nature of target variable we get to decide the loss metric.
+
+Note : One can manupulate scores in recall and precision to achieve a certain number but not the F1 score. 
+Hence to truly access the model performance always check the f1 score.
+
+Personal tip :
+Try building a baseline model first without scaling and once you get the accuracy of the model then try scaling and see if the accuracy is improved or not.
+
+*** always see every step as an expriment ***
+
+F1 score = 2*p*r / (p+r)
+
+
+# Hyper Parameter Tuning
+
+Our model learns every thing from the data associations, distributions and more to predict values.
+But there are some parameters which our algorithm decides from themselves to better the prediction performance those are hyperparameters.
+
+Motive : It decides how fast the algorithm want to finish (converge).
+
+
